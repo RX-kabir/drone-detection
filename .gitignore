@@ -18,7 +18,7 @@ env/
 
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb
+
 
 # Dataset (too large for GitHub)
 data/raw/
