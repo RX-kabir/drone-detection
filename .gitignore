@@ -27,6 +27,7 @@ data/processed/
 # Model weights (large files)
 models/weights/*.pt
 models/runs/
+!models/weights/best.pt
 
 # Outputs
 outputs/images/*
