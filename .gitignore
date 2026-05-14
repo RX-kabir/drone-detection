@@ -54,3 +54,12 @@ Thumbs.db
 
 # YOLO training cache
 *.cache
+
+assets/*.mp4
+*.mp4
+*.avi
+*.mov
+*.pt
+*.pth
+*.h5
+*.onnx
