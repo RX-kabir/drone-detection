@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drone Detection System</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <i class="fa-solid fa-drone"></i>
+        <span>DroneVision</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#upload-section">Detect</a>
+        <a href="#stats-section">Stats</a>
+        <a href="#about-section">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">YOLOv8 · VisDrone · Real-time</div>
+      <h1>Drone Human &amp;<br/>Car Detection</h1>
+      <p>Upload a drone image or video to detect and count
+         humans and vehicles using a fine-tuned YOLOv8 model
+         trained on the VisDrone dataset.</p>
+      <a href="#upload-section" class="btn-primary">
+        <i class="fa-solid fa-upload"></i> Start Detection
+      </a>
+    </div>
+    <div class="hero-visual">
+      <div class="stat-card">
+        <span class="stat-num">39+</span>
+        <span class="stat-lbl">FPS</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">78%</span>
+        <span class="stat-lbl">Car mAP50</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">10</span>
+        <span class="stat-lbl">Classes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upload Section -->
+  <section class="section" id="upload-section">
+    <div class="container">
+      <h2 class="section-title">Upload &amp; Detect</h2>
+      <p class="section-sub">Supports JPG, PNG, MP4, AVI, MOV</p>
+
+      <div class="upload-card">
+
+        <!-- Drop Zone -->
+        <div class="dropzone" id="dropzone">
+          <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+          <p class="drop-text">Drag &amp; drop your file here</p>
+          <p class="drop-sub">or</p>
+          <label class="btn-outline" for="fileInput">
+            <i class="fa-solid fa-folder-open"></i> Browse File
+          </label>
+          <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.mp4,.avi,.mov" hidden/>
+          <p class="drop-hint">Max size: 100MB</p>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-box" id="previewBox" style="display:none">
+          <img id="previewImg" src="" alt="preview" style="display:none"/>
+          <video id="previewVid" controls style="display:none"></video>
+          <button class="btn-clear" id="clearBtn">
+            <i class="fa-solid fa-xmark"></i> Clear
+          </button>
+        </div>
+
+        <!-- Confidence Slider -->
+        <div class="controls">
+          <label class="ctrl-label">
+            <i class="fa-solid fa-sliders"></i>
+            Confidence Threshold:
+            <strong id="confVal">0.25</strong>
+          </label>
+          <input type="range" id="confSlider"
+                 min="0.1" max="0.9" step="0.05" value="0.25"
+                 class="slider"/>
+        </div>
+
+        <!-- Detect Button -->
+        <button class="btn-detect" id="detectBtn" disabled>
+          <i class="fa-solid fa-magnifying-glass"></i>
+          Run Detection
+        </button>
+
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-wrap" id="progressWrap" style="display:none">
+        <div class="progress-bar" id="progressBar"></div>
+        <p class="progress-label" id="progressLabel">Processing...</p>
+      </div>
+
+      <!-- Results -->
+      <div class="results-card" id="resultsCard" style="display:none">
+
+        <div class="results-header">
+          <h3><i class="fa-solid fa-chart-bar"></i> Detection Results</h3>
+          <a id="downloadBtn" href="#" download class="btn-download">
+            <i class="fa-solid fa-download"></i> Download
+          </a>
+        </div>
+
+        <div class="counts-row">
+          <div class="count-box human">
+            <i class="fa-solid fa-person"></i>
+            <span class="count-num" id="humanCount">0</span>
+            <span class="count-lbl">Humans</span>
+          </div>
+          <div class="count-box car">
+            <i class="fa-solid fa-car"></i>
+            <span class="count-num" id="carCount">0</span>
+            <span class="count-lbl">Cars</span>
+          </div>
+          <div class="count-box total">
+            <i class="fa-solid fa-layer-group"></i>
+            <span class="count-num" id="totalCount">0</span>
+            <span class="count-lbl">Total Objects</span>
+          </div>
+          <div class="count-box time">
+            <i class="fa-solid fa-bolt"></i>
+            <span class="count-num" id="timeMs">0</span>
+            <span class="count-lbl">ms</span>
+          </div>
+        </div>
+
+        <!-- Result image -->
+        <div class="result-img-wrap">
+          <img id="resultImg" src="" alt="result" style="display:none"/>
+          <video id="resultVid" controls style="display:none"></video>
+        </div>
+
+        <!-- Breakdown table -->
+        <div class="breakdown-wrap" id="breakdownWrap" style="display:none">
+          <h4>Class Breakdown</h4>
+          <div class="breakdown-grid" id="breakdownGrid"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="section section-dark" id="stats-section">
+    <div class="container">
+      <h2 class="section-title">Model Performance</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-bullseye"></i></div>
+          <div class="metric-val">29.6%</div>
+          <div class="metric-lbl">Overall mAP@50</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-person-walking"></i></div>
+          <div class="metric-val">27.2%</div>
+          <div class="metric-lbl">Human mAP@50</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-car"></i></div>
+          <div class="metric-val">52.8%</div>
+          <div class="metric-lbl">Car mAP@50</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-gauge-high"></i></div>
+          <div class="metric-val">39 FPS</div>
+          <div class="metric-lbl">Inference Speed</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-check-double"></i></div>
+          <div class="metric-val">58.6%</div>
+          <div class="metric-lbl">Precision</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+          <div class="metric-val">11M</div>
+          <div class="metric-lbl">Parameters</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section" id="about-section">
+    <div class="container">
+      <h2 class="section-title">About This Project</h2>
+      <div class="about-grid">
+        <div class="about-card">
+          <i class="fa-solid fa-database about-icon"></i>
+          <h3>Dataset</h3>
+          <p>Trained on VisDrone2019-DET with 6,471 training images
+             and 343K annotated objects across 10 classes.</p>
+        </div>
+        <div class="about-card">
+          <i class="fa-brands fa-python about-icon"></i>
+          <h3>Model</h3>
+          <p>YOLOv8s fine-tuned for 50 epochs using AdamW optimizer,
+             mosaic augmentation, and multi-scale detection heads.</p>
+        </div>
+        <div class="about-card">
+          <i class="fa-solid fa-route about-icon"></i>
+          <h3>Tracking</h3>
+          <p>ByteTrack multi-object tracking assigns persistent IDs
+             and trajectory trails across video frames.</p>
+        </div>
+        <div class="about-card">
+          <i class="fa-solid fa-server about-icon"></i>
+          <h3>Stack</h3>
+          <p>Python · PyTorch · Ultralytics · OpenCV · Flask ·
+             Deployed with real-time GPU inference.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>DroneVision · YOLOv8 on VisDrone · Antlings Internship 2026</p>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

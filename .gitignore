@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+
+# Virtual environment
+venv/
+env/
+.env
+.venv
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Dataset (too large for GitHub)
+data/raw/
+data/processed/
+
+# Model weights (large files)
+models/weights/*.pt
+models/runs/
+
+# Outputs
+outputs/images/*
+outputs/videos/*
+outputs/tracking/*
+!outputs/images/.gitkeep
+!outputs/videos/.gitkeep
+!outputs/tracking/.gitkeep
+
+# Flask uploads
+webapp/static/uploads/*
+webapp/static/results/*
+!webapp/static/uploads/.gitkeep
+!webapp/static/results/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# YOLO training cache
+*.cache

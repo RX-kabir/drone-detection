@@ -1,0 +1,30 @@
+# Core
+ultralytics==8.3.40
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Computer Vision
+opencv-python==4.10.0.84
+Pillow==10.4.0
+numpy==1.26.4
+
+# Data & Visualization
+matplotlib==3.9.2
+seaborn==0.13.2
+pandas==2.2.3
+scikit-learn==1.5.2
+
+# Web App
+flask==3.0.3
+flask-cors==5.0.0
+Werkzeug==3.0.4
+
+# Utilities
+tqdm==4.66.5
+PyYAML==6.0.2
+requests==2.32.3
+python-dotenv==1.0.1
+
+# Tracking (bonus)
+lapx==0.5.9
