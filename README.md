@@ -220,9 +220,4 @@ Tracking is implemented using **ByteTrack**, integrated with YOLOv8 inference to
 
 ---
 
-## 👤 Author
 
-**Mohammad Adnan Kabir**
-
-Antlings Internship Program 2026
-AI/ML Technical Assessment
